@@ -22,13 +22,13 @@ public class AddCustomerTest extends BaseTest {
     @Feature("Ввод данных в форму и отправка")
     public void testFormTest() {
         new AddCustomerPage(driver)
-                .clickToTabAddCustomer();
-                //.inputFirstName()
-                //.inputLastName()
-                //.inputPostCode()
-                //.clickToButtonAddCustomer();
+                .clickToTabAddCustomer()
+                .inputFirstName(config.getFirstName())
+                .inputLastName(config.getLastName())
+                .inputPostCode(config.getPostCode())
+                .clickToButtonAddCustomer();
 
-        new OpenAccountPage(driver);
+        //new OpenAccountPage(driver);
                 //.inputFirstName(config.firstName())
                 //.inputLastName(config.lastName())
                 //.inputUserEmail(config.userEmail())
@@ -48,13 +48,7 @@ public class AddCustomerTest extends BaseTest {
                 .checkHead()
                 .checkTableElement();
                 Кнопки
-                body > div > div > div.ng-scope > div > div.center > button:nth-child(1)
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > div:nth-child(1) > input
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > div:nth-child(2) > input
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > div:nth-child(3) > input
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > button
-                body > div > div > div.ng-scope > div > div.center > button:nth-child(2)
-                body > div > div > div.ng-scope > div > div.center > button:nth-child(3)
+
 
 
  */

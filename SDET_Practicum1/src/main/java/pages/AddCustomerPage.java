@@ -20,10 +20,35 @@ public class AddCustomerPage {
     private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
 
     /**
+     * Элемент с полем ввода First Name (css = "div[class='main-select-JJyaZ main-location-XUs1_']")
+     */
+    @FindBy(css = "button[ng-class='btnClass1']")
+    private WebElement tabAddCustomer;
+
+    /**
      * Элемент с полем ввода First Name
      */
-    @FindBy(css = ".btnClass2")
-    private WebElement tabAddCustomer;
+    @FindBy(css = "input[placeholder='First Name']")
+    private WebElement firstName;
+
+    /**
+     * Элемент с полем ввода First Name
+     */
+    @FindBy(css = "input[placeholder='Last Name']")
+    private WebElement lastName;
+
+    /**
+     * Элемент с полем ввода First Name
+     */
+    @FindBy(css = "input[placeholder='Post Code']")
+    private WebElement postCode;
+
+    /**
+     * Элемент с полем ввода First Name
+     */
+    @FindBy(css = "button[class='btn btn-default']")
+    private WebElement buttonAddCustomer;
+
 
     /**
      * Конструктор создания FormPage
@@ -45,4 +70,28 @@ public class AddCustomerPage {
         tabAddCustomer.click();
         return this;
     }
+
+    public AddCustomerPage inputFirstName(String input) {
+        firstName.sendKeys(input);
+        //makeScreenShot(driver);
+        return this;
+    }
+
+    public AddCustomerPage inputLastName(String input) {
+        lastName.sendKeys(input);
+        //makeScreenShot(driver);
+        return this;
+    }
+
+    public AddCustomerPage inputPostCode(String input) {
+        postCode.sendKeys(input);
+        //makeScreenShot(driver);
+        return this;
+    }
+
+    public AddCustomerPage clickToButtonAddCustomer() {
+        buttonAddCustomer.click();
+        return this;
+    }
+
 }
