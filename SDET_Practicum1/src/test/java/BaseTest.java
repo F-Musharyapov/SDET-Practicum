@@ -3,6 +3,7 @@ import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -30,7 +31,11 @@ public class BaseTest {
         System.setProperty(config.driverProperty(), config.driverPath());
 
         // создание экземпляра драйвера
-        driver = new ChromeDriver();
+        //driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+
+        driver = new ChromeDriver(options);
 
         // открытие страницы по url
         driver.get(config.url());  //открывает и переходит по ссылке
@@ -54,5 +59,6 @@ public class BaseTest {
 
         // остановка работы драйвера
         driver.close();
+        //driver.quit();
     }
 }

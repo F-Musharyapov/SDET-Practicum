@@ -4,7 +4,8 @@ import io.qameta.allure.Feature;
 import org.aeonbits.owner.ConfigFactory;
 import org.testng.annotations.Test;
 import pages.AddCustomerPage;
-import pages.OpenAccountPage;
+import pages.CustomerPage;
+import pages.DeleteCustomer;
 
 
 /**
@@ -14,7 +15,7 @@ import pages.OpenAccountPage;
 public class AddCustomerTest extends BaseTest {
 
     /**
-     * Экземпляр конфигурации с параметрами для Form тестов
+     * Экземпляр конфигурации
      */
     private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
 
@@ -22,41 +23,18 @@ public class AddCustomerTest extends BaseTest {
     @Feature("Ввод данных в форму и отправка")
     public void testFormTest() {
         new AddCustomerPage(driver)
-                .clickToTabAddCustomer();
-                //.inputFirstName()
-                //.inputLastName()
-                //.inputPostCode()
-                //.clickToButtonAddCustomer();
+                .clickToTabAddCustomer()
+                .inputPostCode()
+                .inputFirstName()
+                .inputLastName(config.getLastName())
+                .clickToButtonAddCustomer();
 
-        new OpenAccountPage(driver);
-                //.inputFirstName(config.firstName())
-                //.inputLastName(config.lastName())
-                //.inputUserEmail(config.userEmail())
-                //.clickToGender()
-                //.inputUserNumber(config.userNumber())
-                //.selectDateOfBirth()
-                //.inputSubjectsInput(config.subjectsInput())
-                //.clickToHobbiesWrapper()
-                //.uploadPicture()
-                //.inputCurrentAddress(config.currentAddress())
-                //.clickToSelectState()
-                //.clickToSelectCity()
-        //.clickToSubmit();
+        new CustomerPage(driver)
+                .clickToTabCustomer()
+                .clickToFirstNameHeader()
+                .checkSortByFirstName();
 
-/*
-        new SuccessfulPage(driver)
-                .checkHead()
-                .checkTableElement();
-                Кнопки
-                body > div > div > div.ng-scope > div > div.center > button:nth-child(1)
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > div:nth-child(1) > input
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > div:nth-child(2) > input
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > div:nth-child(3) > input
-                - body > div > div > div.ng-scope > div > div.ng-scope > div > div > form > button
-                body > div > div > div.ng-scope > div > div.center > button:nth-child(2)
-                body > div > div > div.ng-scope > div > div.center > button:nth-child(3)
-
-
- */
+        new DeleteCustomer(driver)
+                .deleteCustomerWithNameClosestToAverageLength();
     }
 }
