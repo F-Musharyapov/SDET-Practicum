@@ -1,3 +1,5 @@
+package tests;
+
 import config.AddCustomerConfig;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;

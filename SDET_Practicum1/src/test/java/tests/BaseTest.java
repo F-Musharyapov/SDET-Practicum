@@ -1,6 +1,7 @@
+package tests;
+
 import config.BaseConfig;
 import org.aeonbits.owner.ConfigFactory;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -47,7 +48,7 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         // Stating the Javascript Executor driver
-        JavascriptExecutor js = (JavascriptExecutor)driver;
+        //JavascriptExecutor js = (JavascriptExecutor)driver;
     }
 
 

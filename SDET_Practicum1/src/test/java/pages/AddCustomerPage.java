@@ -8,13 +8,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.junit.Assert;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.testng.AssertJUnit.assertTrue;
+import static utils.GeneratorHelper.generateFirstName;
+import static utils.GeneratorHelper.generatePostCode;
+import static utils.Waiters.*;
 
-import java.time.Duration;
-import java.util.Random;
-
+/**
+ * Класс в котором происходит взаимодействие табом AddCustomer
+ */
 public class AddCustomerPage {
     /**
      * Экземпляр драйвера для управления браузером
@@ -26,8 +27,10 @@ public class AddCustomerPage {
      */
     private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
 
+    String getPostCode = generatePostCode();
+
     /**
-     * Элемент с полем ввода First Name (css = "div[class='main-select-JJyaZ main-location-XUs1_']")
+     * Элемент таба AddCustomer
      */
     @FindBy(css = "button[ng-class='btnClass1']")
     private WebElement tabAddCustomer;
@@ -39,30 +42,26 @@ public class AddCustomerPage {
     private WebElement firstName;
 
     /**
-     * Элемент с полем ввода First Name
+     * Элемент с полем ввода Last Name
      */
     @FindBy(css = "input[placeholder='Last Name']")
     private WebElement lastName;
 
     /**
-     * Элемент с полем ввода First Name
+     * Элемент с полем ввода Post Name
      */
     @FindBy(css = "input[placeholder='Post Code']")
     private WebElement postCode;
 
     /**
-     * Элемент с полем ввода First Name
+     * Элемент кнопка отправки данных
      */
     @FindBy(css = "button[class='btn btn-default']")
     private WebElement buttonAddCustomer;
 
-    @FindBy(css = "button[class='btn btn-default']")
-    private WebElement successLocator;
-
-
 
     /**
-     * Конструктор создания FormPage
+     * Конструктор создания AddCustomerPage
      *
      * @param driver драйвер для управления браузером
      */
@@ -76,76 +75,65 @@ public class AddCustomerPage {
      *
      * @return текущая страница
      */
-    @Step("")
+    @Step("Выбор таба AddCustomer")
     public AddCustomerPage clickToTabAddCustomer() {
         tabAddCustomer.click();
         return this;
     }
 
-    // Генерация 10-значного номера для поля Post Code
-    String getPostCode = generatePostCode();
-
-    // Генерация имени на основе Post Code
-    //String getFirstName = generateFirstName(getPostCode);
-
-    //метод генерации 10 цифр
-    private static String generatePostCode() {
-        Random random = new Random();
-        String postCode = "";
-
-        for (int i = 0; i < 10; i++) {
-            postCode += random.nextInt(10); // Генерация цифр от 0 до 9
-        }
-
-        return postCode;
-    }
-
+    /**
+     * Метод ввода в поле Post Code
+     *
+     * @return текущая страница
+     */
+    @Step("Ввод в поле Post Code")
     public AddCustomerPage inputPostCode() {
         postCode.sendKeys(generatePostCode());
         //makeScreenShot(driver);
         return this;
     }
 
-    // Метод для генерации имени на основе Post Code
-    private static String generateFirstName(String postCode) {
-        String firstName = "";
-
-        for (int i = 0; i < postCode.length(); i += 2) {
-            // Берем две цифры
-            String pair = postCode.substring(i, Math.min(i + 2, postCode.length()));
-            int number = Integer.parseInt(pair);
-
-            // Преобразуем в букву
-            char letter = (char) ('a' + (number % 26)); // 0-25 -> a-z
-            firstName += letter; // Добавляем букву к имени
-        }
-
-        return firstName;
-    }
-
+    /**
+     * Метод ввода в поле First Name
+     *
+     * @return текущая страница
+     */
+    @Step("Ввод в поле First Name")
     public AddCustomerPage inputFirstName() {
         firstName.sendKeys(generateFirstName(getPostCode));
         //makeScreenShot(driver);
         return this;
     }
 
+    /**
+     * Метод ввода в поле Last Name
+     *
+     * @return текущая страница
+     */
+    @Step("Ввод в поле Last Name")
     public AddCustomerPage inputLastName(String input) {
         lastName.sendKeys(input);
         //makeScreenShot(driver);
         return this;
     }
 
-
+    /**
+     * Метод клика по кнопке отправки и проверка
+     *
+     * @return текущая страница
+     */
+    @Step("Клик по кнопке отправки и проверка")
     public AddCustomerPage clickToButtonAddCustomer() {
         buttonAddCustomer.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.alertIsPresent());
-        Alert alert = driver.switchTo().alert(); //переключаемся на окно
-        String alertText = alert.getText(); //извлечение сообщения
+        waitForAlert(driver);
+        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        //wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
 
-        Assert.assertTrue("Текст предупреждения не содержит ожидаемого сообщения.",
+        assertTrue("Текст предупреждения не содержит ожидаемого сообщения.",
                 alertText.contains("Customer added successfully with customer id"));
-        alert.accept(); //подвердили окно
+        alert.accept();
         return this;
     }
 }

@@ -22,4 +22,9 @@ public class Waiters {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(element));
     }
 
+    public static void waitForAlert(final WebDriver driver) {
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.alertIsPresent());
+    }
 }
+//WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//wait.until(ExpectedConditions.alertIsPresent());

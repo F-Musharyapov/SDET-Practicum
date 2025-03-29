@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Класс в котором происходит взаимодействие с окном Customer
+ */
 public class CustomerPage {
     /**
      * Экземпляр драйвера для управления браузером
@@ -22,20 +25,25 @@ public class CustomerPage {
     /**
      * Экземпляр конфигурации с параметрами для тестов формы на странице
      */
-    private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
+    //private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
 
+    /**
+     * Элемент таба Customer
+     */
     @FindBy(css = "button[ng-class='btnClass3']")
     private WebElement tabCustomer;
 
+    /**
+     * Элемент таблица
+     */
     @FindBy(css = "table[class=\"table table-bordered table-striped\"]")
     private WebElement tableElements;
+
+    /**
+     * Элемент столбца FirstName
+     */
     @FindBy(css = "a[ng-click=\"sortType = 'fName'; sortReverse = !sortReverse\"]")
     private WebElement firstNameHeader;
-
-    @FindBy(css = "span[ng-show=\"sortType == 'fName' && !sortReverse\"].fa-caret-down:not(.ng-hide)")
-    private WebElement firstNameTabeSortDown;
-    @FindBy(css = "span[ng-show=\"sortType == 'fName' && sortReverse\"].fa-caret-up:not(.ng-hide)")
-    private WebElement firstNameTabeSortUp;
 
     /**
      * Конструктор создания CustomerPage
@@ -48,21 +56,33 @@ public class CustomerPage {
     }
 
     /**
-     * Метод клика на таб tabAddCustomer
+     * Метод клика на таб Customer
      *
      * @return текущая страница
      */
-    @Step("")
+    @Step("Выбор таба Customer")
     public CustomerPage clickToTabCustomer() {
         tabCustomer.click();
         return this;
     }
-    @Step("")
+
+    /**
+     * Метод клика по столбцу First Name
+     *
+     * @return текущая страница
+     */
+    @Step("Клик по столбцу First Name")
     public CustomerPage clickToFirstNameHeader() {
         firstNameHeader.click();
         return this;
     }
 
+    /**
+     * Метод проверки сортировки
+     *
+     * @return текущая страница
+     */
+    @Step("Проверка сортировки")
     public boolean checkSortByFirstName() {
 
         List<WebElement> rows = driver.findElements(By.cssSelector(".table.table-bordered.table-striped tbody tr"));
