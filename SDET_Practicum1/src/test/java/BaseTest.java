@@ -59,6 +59,6 @@ public class BaseTest {
 
         // остановка работы драйвера
         //driver.close();
-        driver.quit();
+        //driver.quit();
     }
 }

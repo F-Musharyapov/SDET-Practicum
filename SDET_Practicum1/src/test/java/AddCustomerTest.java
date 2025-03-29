@@ -4,7 +4,8 @@ import io.qameta.allure.Feature;
 import org.aeonbits.owner.ConfigFactory;
 import org.testng.annotations.Test;
 import pages.AddCustomerPage;
-import pages.OpenAccountPage;
+import pages.CustomerPage;
+import pages.DeleteCustomer;
 
 
 /**
@@ -14,7 +15,7 @@ import pages.OpenAccountPage;
 public class AddCustomerTest extends BaseTest {
 
     /**
-     * Экземпляр конфигурации с параметрами для Form тестов
+     * Экземпляр конфигурации
      */
     private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
 
@@ -23,34 +24,17 @@ public class AddCustomerTest extends BaseTest {
     public void testFormTest() {
         new AddCustomerPage(driver)
                 .clickToTabAddCustomer()
-                .inputFirstName(config.getFirstName())
+                .inputPostCode()
+                .inputFirstName()
                 .inputLastName(config.getLastName())
-                .inputPostCode(config.getPostCode())
                 .clickToButtonAddCustomer();
 
-        //new OpenAccountPage(driver);
-                //.inputFirstName(config.firstName())
-                //.inputLastName(config.lastName())
-                //.inputUserEmail(config.userEmail())
-                //.clickToGender()
-                //.inputUserNumber(config.userNumber())
-                //.selectDateOfBirth()
-                //.inputSubjectsInput(config.subjectsInput())
-                //.clickToHobbiesWrapper()
-                //.uploadPicture()
-                //.inputCurrentAddress(config.currentAddress())
-                //.clickToSelectState()
-                //.clickToSelectCity()
-        //.clickToSubmit();
+        new CustomerPage(driver)
+                .clickToTabCustomer()
+                .clickToFirstNameHeader()
+                .checkSortByFirstName();
 
-/*
-        new SuccessfulPage(driver)
-                .checkHead()
-                .checkTableElement();
-                Кнопки
-
-
-
- */
+        new DeleteCustomer(driver)
+                .deleteCustomerWithNameClosestToAverageLength();
     }
 }

@@ -3,10 +3,17 @@ package pages;
 import config.AddCustomerConfig;
 import io.qameta.allure.Step;
 import org.aeonbits.owner.ConfigFactory;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.junit.Assert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.Random;
 
 public class AddCustomerPage {
     /**
@@ -49,6 +56,10 @@ public class AddCustomerPage {
     @FindBy(css = "button[class='btn btn-default']")
     private WebElement buttonAddCustomer;
 
+    @FindBy(css = "button[class='btn btn-default']")
+    private WebElement successLocator;
+
+
 
     /**
      * Конструктор создания FormPage
@@ -65,14 +76,55 @@ public class AddCustomerPage {
      *
      * @return текущая страница
      */
-    @Step("Ввод данных в поле ввода First Name")
+    @Step("")
     public AddCustomerPage clickToTabAddCustomer() {
         tabAddCustomer.click();
         return this;
     }
 
-    public AddCustomerPage inputFirstName(String input) {
-        firstName.sendKeys(input);
+    // Генерация 10-значного номера для поля Post Code
+    String getPostCode = generatePostCode();
+
+    // Генерация имени на основе Post Code
+    //String getFirstName = generateFirstName(getPostCode);
+
+    //метод генерации 10 цифр
+    private static String generatePostCode() {
+        Random random = new Random();
+        String postCode = "";
+
+        for (int i = 0; i < 10; i++) {
+            postCode += random.nextInt(10); // Генерация цифр от 0 до 9
+        }
+
+        return postCode;
+    }
+
+    public AddCustomerPage inputPostCode() {
+        postCode.sendKeys(generatePostCode());
+        //makeScreenShot(driver);
+        return this;
+    }
+
+    // Метод для генерации имени на основе Post Code
+    private static String generateFirstName(String postCode) {
+        String firstName = "";
+
+        for (int i = 0; i < postCode.length(); i += 2) {
+            // Берем две цифры
+            String pair = postCode.substring(i, Math.min(i + 2, postCode.length()));
+            int number = Integer.parseInt(pair);
+
+            // Преобразуем в букву
+            char letter = (char) ('a' + (number % 26)); // 0-25 -> a-z
+            firstName += letter; // Добавляем букву к имени
+        }
+
+        return firstName;
+    }
+
+    public AddCustomerPage inputFirstName() {
+        firstName.sendKeys(generateFirstName(getPostCode));
         //makeScreenShot(driver);
         return this;
     }
@@ -83,15 +135,17 @@ public class AddCustomerPage {
         return this;
     }
 
-    public AddCustomerPage inputPostCode(String input) {
-        postCode.sendKeys(input);
-        //makeScreenShot(driver);
-        return this;
-    }
 
     public AddCustomerPage clickToButtonAddCustomer() {
         buttonAddCustomer.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert(); //переключаемся на окно
+        String alertText = alert.getText(); //извлечение сообщения
+
+        Assert.assertTrue("Текст предупреждения не содержит ожидаемого сообщения.",
+                alertText.contains("Customer added successfully with customer id"));
+        alert.accept(); //подвердили окно
         return this;
     }
-
 }
