@@ -58,7 +58,7 @@ public class BaseTest {
     public void tearDown(){
 
         // остановка работы драйвера
-        driver.close();
+        //driver.close();
         //driver.quit();
     }
 }
