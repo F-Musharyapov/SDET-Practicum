@@ -1,3 +1,5 @@
-/SDET_Practicum1/target/
-/SDET_Practicum1/chromedriver/
 /.idea/
+/SDET_Practicum1/allure-results/
+/SDET_Practicum1/target/
+/SDET_Practicum1.iml
+/SDET_Practicum1/.allure/

@@ -4,7 +4,6 @@ import config.BaseConfig;
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -21,7 +20,7 @@ public class BaseTest {
     protected WebDriver driver;
 
     /**
-     * Экземпляр файла конфигурации с общими параметрами
+     * Экземпляр конфигурации с общими параметрами
      */
     private final BaseConfig config = ConfigFactory.create(BaseConfig.class, System.getenv());
 
@@ -30,26 +29,24 @@ public class BaseTest {
      */
     @BeforeMethod
     public void setUp() {
+
         System.setProperty(config.driverProperty(), config.driverPath());
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
 
         driver.get(config.url());
-
         driver.manage().window().maximize();
-
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     /**
      * Общие настройки для всех тестов, после выполнения каждого
      */
+
     @AfterMethod
     public void tearDown() {
-
-        //driver.close();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }

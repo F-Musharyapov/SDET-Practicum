@@ -5,8 +5,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.testng.Assert;
 
 
@@ -94,6 +96,9 @@ public class DeleteCustomerPage extends BasePage {
      * @return средняя длина имен
      */
     private double calculateAverageLength(List<String> names) {
+        if (names.isEmpty()) {
+            return 0;
+        }
         double totalLength = 0;
         for (String name : names) {
             totalLength += name.length();
@@ -141,6 +146,7 @@ public class DeleteCustomerPage extends BasePage {
             }
         }
     }
+
     /**
      * Метод ассерт проверка, что имена удаленны
      *

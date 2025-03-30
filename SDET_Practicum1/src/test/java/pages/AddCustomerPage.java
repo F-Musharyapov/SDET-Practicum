@@ -1,14 +1,18 @@
 package pages;
 
+import config.AddCustomerConfig;
 import io.qameta.allure.Step;
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+
 import static utils.GeneratorHelper.generateFirstName;
 import static utils.GeneratorHelper.generatePostCode;
-import static utils.Waiters.*;
+import static utils.Waiters.waitForAlert;
 
 /**
  * Класс в котором происходит взаимодействие табом AddCustomer
@@ -16,9 +20,15 @@ import static utils.Waiters.*;
 public class AddCustomerPage extends BasePage {
 
     /**
+     * Экземпляр конфигурации с параметрами для тестов формы на странице
+     */
+    private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
+
+    /**
      * Переменная для хранения полученных данных из generatePostCode()
      */
-    String getPostCode = generatePostCode();
+    private String postCodeValue;
+
 
     /**
      * Элемент таба AddCustomer
@@ -77,8 +87,9 @@ public class AddCustomerPage extends BasePage {
      */
     @Step("Ввод в поле Post Code")
     public AddCustomerPage inputPostCode() {
-        postCode.sendKeys(generatePostCode());
-        Assert.assertEquals(postCode.getAttribute("value"), postCode, "Post Code введен некорректно.");
+        postCodeValue = generatePostCode();
+        postCode.sendKeys(postCodeValue);
+        Assert.assertEquals(postCode.getAttribute("value"), postCodeValue, "Post Code введен некорректно.");
         //makeScreenShot(driver);
         return this;
     }
@@ -90,8 +101,9 @@ public class AddCustomerPage extends BasePage {
      */
     @Step("Ввод в поле First Name")
     public AddCustomerPage inputFirstName() {
-        firstName.sendKeys(generateFirstName(getPostCode));
-        Assert.assertEquals(firstName.getAttribute("value"), firstName, "Имя введено некорректно.");
+        String generatedFirstName = generateFirstName(postCodeValue);
+        firstName.sendKeys(generatedFirstName);
+        Assert.assertEquals(firstName.getAttribute("value"), generatedFirstName, "Имя введено некорректно.");
         //makeScreenShot(driver);
         return this;
     }
@@ -157,7 +169,12 @@ public class AddCustomerPage extends BasePage {
      * Метод закрытия алерта
      */
     private void acceptAlert() {
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
+        try {
+            Alert alert = driver.switchTo().alert();
+            alert.accept();
+        } catch (NoAlertPresentException e) {
+            // Логирование или обработка отсутствия алерта
+            System.out.println("Нет активного алерта.");
+        }
     }
 }

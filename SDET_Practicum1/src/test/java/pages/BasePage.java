@@ -1,7 +1,5 @@
 package pages;
 
-import config.AddCustomerConfig;
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
@@ -15,22 +13,19 @@ public class BasePage {
     protected final WebDriver driver;
 
     /**
-     * Экземпляр конфигурации с параметрами для тестов формы на странице
-     */
-    private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
-
-    /**
      * Конструктор создания страницы BasePage
      *
      * @param driver драйвер для управления браузером
      */
     public BasePage(final WebDriver driver) {
-        try {
-            PageFactory.initElements(driver, this);
-            this.driver = driver;
+        if (driver == null) {
+            throw new IllegalArgumentException("Значение WebDriver не может быть равно null");
         }
-        catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+        try {
+            this.driver = driver;
+            PageFactory.initElements(driver, this);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException("Не удалось инициализировать элементы страницы. Проверить, что WebDriver корректно инициализирован.", e);
         }
     }
 }

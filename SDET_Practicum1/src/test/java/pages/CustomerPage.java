@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -71,9 +72,9 @@ public class CustomerPage extends BasePage {
      */
     @Step("Проверка сортировки имён в таблице")
     public boolean checkSortByFirstName() {
-        boolean isSortedAscending = checkSortingOrder(true);
+        boolean isSortedAscending = checkSortingOrder(false);
         firstNameHeader.click();
-        boolean isSortedDescending = checkSortingOrder(false);
+        boolean isSortedDescending = checkSortingOrder(true);
         return isSortedAscending && isSortedDescending;
     }
 
@@ -122,8 +123,6 @@ public class CustomerPage extends BasePage {
         List<String> names = getFirstNamesFromRows();
         List<String> sortedNames = sortNames(names, ascending);
         boolean isSorted = areListsEqual(names, sortedNames);
-
-        // Добавляем ассерты для проверки сортировки
         Assert.assertTrue(isSorted, "Сортировка по именам " + (ascending ? "возрастающая" : "убывающая") + " выполнена некорректно.");
 
         return isSorted;
