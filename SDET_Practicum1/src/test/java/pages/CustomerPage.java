@@ -1,14 +1,11 @@
 package pages;
 
-import config.AddCustomerConfig;
 import io.qameta.allure.Step;
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-
+import org.testng.Assert;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,16 +13,7 @@ import java.util.List;
 /**
  * Класс в котором происходит взаимодействие с окном Customer
  */
-public class CustomerPage {
-    /**
-     * Экземпляр драйвера для управления браузером
-     */
-    private final WebDriver driver;
-
-    /**
-     * Экземпляр конфигурации с параметрами для тестов формы на странице
-     */
-    //private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
+public class CustomerPage extends BasePage {
 
     /**
      * Элемент таба Customer
@@ -36,8 +24,8 @@ public class CustomerPage {
     /**
      * Элемент таблица
      */
-    @FindBy(css = "table[class=\"table table-bordered table-striped\"]")
-    private WebElement tableElements;
+    @FindBy(css = ".table.table-bordered.table-striped tbody tr")
+    private List<WebElement> tableElements;
 
     /**
      * Элемент столбца FirstName
@@ -50,9 +38,8 @@ public class CustomerPage {
      *
      * @param driver драйвер для управления браузером
      */
-    public CustomerPage(final WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public CustomerPage(WebDriver driver) {
+        super(driver);
     }
 
     /**
@@ -78,41 +65,95 @@ public class CustomerPage {
     }
 
     /**
-     * Метод проверки сортировки
+     * Основной метод проверки сортировки по имени, по возрастанию и убыванию
      *
-     * @return текущая страница
+     * @return возвращает результат true или false
      */
-    @Step("Проверка сортировки")
+    @Step("Проверка сортировки имён в таблице")
     public boolean checkSortByFirstName() {
-
-        List<WebElement> rows = driver.findElements(By.cssSelector(".table.table-bordered.table-striped tbody tr"));
-
-        List<String> names = new ArrayList<>();
-        for (WebElement row : rows) {
-            String name = row.findElement(By.cssSelector("td:nth-child(1)")).getText();
-            names.add(name);
-        }
-
-        List<String> sortedNames = new ArrayList<>(names);
-        Collections.sort(sortedNames);
-
-        boolean isSortedAscending = names.equals(sortedNames);
-
+        boolean isSortedAscending = checkSortingOrder(true);
         firstNameHeader.click();
-
-        rows = driver.findElements(By.cssSelector(".table.table-bordered.table-striped tbody tr"));
-        names.clear();
-        for (WebElement row : rows) {
-            String name = row.findElement(By.cssSelector("td:nth-child(1)")).getText();
-            names.add(name);
-        }
-
-        Collections.reverse(sortedNames);
-
-        boolean isSortedDescending = names.equals(sortedNames);
-
+        boolean isSortedDescending = checkSortingOrder(false);
         return isSortedAscending && isSortedDescending;
     }
 
-}
+    /**
+     * Метод для получения всех строк таблицы в список
+     *
+     * @return возвращает инициализированные строки
+     */
+    private List<WebElement> getRows() {
+        return tableElements;
+    }
 
+    /**
+     * Метод для извлечения имен из строк таблицы
+     *
+     * @return возвращает инициализированные строки
+     */
+    private List<String> getFirstNamesFromRows() {
+        List<WebElement> rows = getRows();
+        List<String> names = new ArrayList<>();
+
+        for (WebElement row : rows) {
+            String name = getFirstNameFromRow(row);
+            names.add(name);
+        }
+        return names;
+    }
+
+    /**
+     * Метод для получения имени из конкретной строки
+     *
+     * @param row строка извлечения имени
+     * @return возвращает имя из строки
+     */
+    private String getFirstNameFromRow(WebElement row) {
+        return row.findElement(By.cssSelector("td:nth-child(1)")).getText();
+    }
+
+    /**
+     * Метод сравнения двух списков исходя из направления
+     *
+     * @param ascending значение для варианта выбора сортировки
+     * @return возвращает результат сравнения
+     */
+    private boolean checkSortingOrder(boolean ascending) {
+        List<String> names = getFirstNamesFromRows();
+        List<String> sortedNames = sortNames(names, ascending);
+        boolean isSorted = areListsEqual(names, sortedNames);
+
+        // Добавляем ассерты для проверки сортировки
+        Assert.assertTrue(isSorted, "Сортировка по именам " + (ascending ? "возрастающая" : "убывающая") + " выполнена некорректно.");
+
+        return isSorted;
+    }
+
+    /**
+     * Метод сортировки имен
+     *
+     * @param names     список имен для сортировки
+     * @param ascending значение для варианта выбора сортировки
+     * @return возвращает отсортированный список
+     */
+    private List<String> sortNames(List<String> names, boolean ascending) {
+        List<String> sortedNames = new ArrayList<>(names);
+        if (ascending) {
+            Collections.sort(sortedNames);
+        } else {
+            Collections.sort(sortedNames, Collections.reverseOrder());
+        }
+        return sortedNames;
+    }
+
+    /**
+     * Метод проверки равенства двух списков
+     *
+     * @param original оригинальный список имен
+     * @param sorted   отсортированный список имен
+     * @return возвращает результат проверки
+     */
+    private boolean areListsEqual(List<String> original, List<String> sorted) {
+        return original.equals(sorted);
+    }
+}
