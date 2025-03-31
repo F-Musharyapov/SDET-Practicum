@@ -60,17 +60,19 @@ public class DeleteCustomerPage extends BasePage {
 
     /**
      * Метод удаления строк с именами, со средней длиной
+     *
+     * @return
      */
     @Step("Удаление строк с именами, со средней длиной")
-    public void deleteCustomerWithNameClosestToAverageLength() {
+    public List<String> deleteCustomerWithNameClosestToAverageLength() {
         List<String> names = getCustomerNames();
         double averageLength = calculateAverageLength(names);
         List<String> closestNames = findClosestNames(names, averageLength);
 
         if (!closestNames.isEmpty()) {
             deleteCustomersByNames(closestNames);
-            assertCustomersDeleted(closestNames);
         }
+        return closestNames; // Возвращаем список удаленных имен
     }
 
     /**
@@ -152,7 +154,8 @@ public class DeleteCustomerPage extends BasePage {
      *
      * @param names список имен
      */
-    private void assertCustomersDeleted(List<String> names) {
+    @Step("Проверка на наличие неудаленных имен")
+    public void assertCustomersDeleted(List<String> names) {
         List<String> remainingNames = getCustomerNames();
 
         for (String name : names) {

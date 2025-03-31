@@ -7,6 +7,9 @@ import org.aeonbits.owner.ConfigFactory;
 import org.testng.annotations.Test;
 import pages.AddCustomerPage;
 
+import static utils.GeneratorHelper.generateFirstName;
+import static utils.GeneratorHelper.generatePostCode;
+
 /**
  * Класс тестирования отправки данных на вкладке AddCustomer
  */
@@ -18,15 +21,23 @@ public class AddCustomerPageTest extends BaseTest {
      */
     private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
 
+    /**
+     * Переменные со сгенерированнымы данными полей PostCode и FirstName
+     */
+    String postCodeValue = generatePostCode();
+    String firstNameValue = generateFirstName(postCodeValue);
+
+
     @Test(description = "Проверки отправки данных с заполненными полями формы")
     @Feature("Ввод данных в форму и отправка")
     public void testForm() {
         new AddCustomerPage(driver)
                 .clickToTabAddCustomer()
-                .inputPostCode()
-                .inputFirstName()
+                .inputPostCode(postCodeValue)
+                .inputFirstName(firstNameValue)
                 .inputLastName(config.getLastName())
                 .clickToButtonAddCustomer()
-                .waitAlert();
+                .waitAlert()
+                .acceptAlert();
     }
 }

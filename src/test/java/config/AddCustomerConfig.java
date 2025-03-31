@@ -9,9 +9,9 @@ import org.aeonbits.owner.Config;
 public interface AddCustomerConfig extends Config {
 
     /**
-     * Метод возвращает параметр getLastName из input_config.properties
-     *
-     * @return параметр поля ввода LastName
+     * Метод возвращает параметр LastName из input_config.properties
      */
+    @Key("getLastNamey")
     String getLastName();
+
 }

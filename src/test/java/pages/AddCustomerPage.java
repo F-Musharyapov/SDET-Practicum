@@ -4,14 +4,11 @@ import config.AddCustomerConfig;
 import io.qameta.allure.Step;
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import static utils.GeneratorHelper.generateFirstName;
-import static utils.GeneratorHelper.generatePostCode;
 import static utils.Waiters.waitForAlert;
 
 /**
@@ -23,11 +20,6 @@ public class AddCustomerPage extends BasePage {
      * Экземпляр конфигурации с параметрами для тестов формы на странице
      */
     private final AddCustomerConfig config = ConfigFactory.create(AddCustomerConfig.class, System.getenv());
-
-    /**
-     * Переменная для хранения полученных данных из generatePostCode()
-     */
-    private String postCodeValue;
 
 
     /**
@@ -86,12 +78,17 @@ public class AddCustomerPage extends BasePage {
      * @return текущая страница
      */
     @Step("Ввод в поле Post Code")
-    public AddCustomerPage inputPostCode() {
-        postCodeValue = generatePostCode();
+    public AddCustomerPage inputPostCode(String postCodeValue) {
         postCode.sendKeys(postCodeValue);
-        Assert.assertEquals(postCode.getAttribute("value"), postCodeValue, "Post Code введен некорректно.");
-        //makeScreenShot(driver);
+        verifyPostCodeValue(postCodeValue);
         return this;
+    }
+
+    /**
+     * Метод сверки текста postCodeValue, асерт
+     */
+    private void verifyPostCodeValue(String verifyPostCodeValue) {
+        Assert.assertEquals(postCode.getAttribute("value"), verifyPostCodeValue, "Post Code введен некорректно.");
     }
 
     /**
@@ -100,12 +97,17 @@ public class AddCustomerPage extends BasePage {
      * @return текущая страница
      */
     @Step("Ввод в поле First Name")
-    public AddCustomerPage inputFirstName() {
-        String generatedFirstName = generateFirstName(postCodeValue);
-        firstName.sendKeys(generatedFirstName);
-        Assert.assertEquals(firstName.getAttribute("value"), generatedFirstName, "Имя введено некорректно.");
-        //makeScreenShot(driver);
+    public AddCustomerPage inputFirstName(String firstNameValue) {
+        firstName.sendKeys(firstNameValue);
+        verifyFirstNameValue(firstNameValue);
         return this;
+    }
+
+    /**
+     * Метод сверки текста First Name, асерт
+     */
+    private void verifyFirstNameValue(String verifyFirstNameValue) {
+        Assert.assertEquals(firstName.getAttribute("value"), verifyFirstNameValue, "Имя введено некорректно.");
     }
 
     /**
@@ -116,9 +118,15 @@ public class AddCustomerPage extends BasePage {
     @Step("Ввод в поле Last Name")
     public AddCustomerPage inputLastName(String input) {
         lastName.sendKeys(input);
-        Assert.assertEquals(lastName.getAttribute("value"), input, "Фамилия введена некорректно.");
-        //makeScreenShot(driver);
+        verifyInputLastName(input);
         return this;
+    }
+
+    /**
+     * Метод сверки текста postCodeValue, асерт
+     */
+    private void verifyInputLastName(String verifyInputLastName) {
+        Assert.assertEquals(lastName.getAttribute("value"), verifyInputLastName, "Фамилия введена некорректно.");
     }
 
     /**
@@ -129,7 +137,6 @@ public class AddCustomerPage extends BasePage {
     @Step("Клик по кнопке отправки")
     public AddCustomerPage clickToButtonAddCustomer() {
         buttonAddCustomer.click();
-        //makeScreenShot(driver);
         return this;
     }
 
@@ -143,7 +150,6 @@ public class AddCustomerPage extends BasePage {
         waitForAlert(driver);
         String alertText = getAlertText();
         verifyAlertText(alertText);
-        acceptAlert();
         return this;
     }
 
@@ -168,13 +174,13 @@ public class AddCustomerPage extends BasePage {
     /**
      * Метод закрытия алерта
      */
-    private void acceptAlert() {
+    @Step("Закрытие окна алерта")
+    public void acceptAlert() {
         try {
             Alert alert = driver.switchTo().alert();
             alert.accept();
-        } catch (NoAlertPresentException e) {
-            // Логирование или обработка отсутствия алерта
-            System.out.println("Нет активного алерта.");
+        } catch (IllegalStateException e) {
+            throw new RuntimeException("Нет активного алерта.", e);
         }
     }
 }
