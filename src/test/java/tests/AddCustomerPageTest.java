@@ -34,8 +34,11 @@ public class AddCustomerPageTest extends BaseTest {
         new AddCustomerPage(driver)
                 .clickToTabAddCustomer()
                 .inputPostCode(postCodeValue)
+                .verifyPostCodeValue(postCodeValue)
                 .inputFirstName(firstNameValue)
+                .verifyFirstNameValue(firstNameValue)
                 .inputLastName(config.getLastName())
+                .verifyInputLastName(config.getLastName())
                 .clickToButtonAddCustomer()
                 .waitAlert()
                 .acceptAlert();

@@ -80,15 +80,15 @@ public class AddCustomerPage extends BasePage {
     @Step("Ввод в поле Post Code")
     public AddCustomerPage inputPostCode(String postCodeValue) {
         postCode.sendKeys(postCodeValue);
-        verifyPostCodeValue(postCodeValue);
         return this;
     }
 
     /**
      * Метод сверки текста postCodeValue, асерт
      */
-    private void verifyPostCodeValue(String verifyPostCodeValue) {
+    public AddCustomerPage verifyPostCodeValue(String verifyPostCodeValue) {
         Assert.assertEquals(postCode.getAttribute("value"), verifyPostCodeValue, "Post Code введен некорректно.");
+        return this;
     }
 
     /**
@@ -99,15 +99,15 @@ public class AddCustomerPage extends BasePage {
     @Step("Ввод в поле First Name")
     public AddCustomerPage inputFirstName(String firstNameValue) {
         firstName.sendKeys(firstNameValue);
-        verifyFirstNameValue(firstNameValue);
         return this;
     }
 
     /**
      * Метод сверки текста First Name, асерт
      */
-    private void verifyFirstNameValue(String verifyFirstNameValue) {
+    public AddCustomerPage verifyFirstNameValue(String verifyFirstNameValue) {
         Assert.assertEquals(firstName.getAttribute("value"), verifyFirstNameValue, "Имя введено некорректно.");
+        return this;
     }
 
     /**
@@ -118,15 +118,15 @@ public class AddCustomerPage extends BasePage {
     @Step("Ввод в поле Last Name")
     public AddCustomerPage inputLastName(String input) {
         lastName.sendKeys(input);
-        verifyInputLastName(input);
         return this;
     }
 
     /**
      * Метод сверки текста postCodeValue, асерт
      */
-    private void verifyInputLastName(String verifyInputLastName) {
+    public AddCustomerPage verifyInputLastName(String verifyInputLastName) {
         Assert.assertEquals(lastName.getAttribute("value"), verifyInputLastName, "Фамилия введена некорректно.");
+        return this;
     }
 
     /**

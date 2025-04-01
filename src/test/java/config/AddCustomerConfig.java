@@ -12,6 +12,7 @@ public interface AddCustomerConfig extends Config {
      * Метод возвращает параметр LastName из input_config.properties
      */
     @Key("getLastNamey")
+    @DefaultValue("LastName")
     String getLastName();
 
 }
