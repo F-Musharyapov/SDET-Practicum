@@ -13,7 +13,6 @@ import java.util.List;
 @Epic("DeleteCustomer Test")
 public class DeleteCustomerPageTest extends BaseTest {
 
-
     @Test(description = "Удаление имени по среднеарифметическому количеству букв")
     @Feature("Вычисление среднеарифметического количеству букв имени и удаление")
     public void deleteTest() {

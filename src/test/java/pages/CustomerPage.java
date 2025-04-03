@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,19 +65,6 @@ public class CustomerPage extends BasePage {
     }
 
     /**
-     * Основной метод проверки сортировки по имени, по возрастанию и убыванию
-     *
-     * @return возвращает результат true или false
-     */
-    @Step("Проверка сортировки имён в таблице")
-    public boolean checkSortByFirstName() {
-        boolean isSortedAscending = checkSortingOrder(false);
-        firstNameHeader.click();
-        boolean isSortedDescending = checkSortingOrder(true);
-        return isSortedAscending && isSortedDescending;
-    }
-
-    /**
      * Метод для получения всех строк таблицы в список
      *
      * @return возвращает инициализированные строки
@@ -119,13 +105,11 @@ public class CustomerPage extends BasePage {
      * @param ascending значение для варианта выбора сортировки
      * @return возвращает результат сравнения
      */
-    private boolean checkSortingOrder(boolean ascending) {
+    @Step("Cравнения двух списков исходя из направления")
+    public boolean checkSortingOrder(boolean ascending) {
         List<String> names = getFirstNamesFromRows();
         List<String> sortedNames = sortNames(names, ascending);
-        boolean isSorted = areListsEqual(names, sortedNames);
-        Assert.assertTrue(isSorted, "Сортировка по именам " + (ascending ? "возрастающая" : "убывающая") + " выполнена некорректно.");
-
-        return isSorted;
+        return isAreListsEqual(names, sortedNames);
     }
 
     /**
@@ -152,7 +136,7 @@ public class CustomerPage extends BasePage {
      * @param sorted   отсортированный список имен
      * @return возвращает результат проверки
      */
-    private boolean areListsEqual(List<String> original, List<String> sorted) {
+    public boolean isAreListsEqual(List<String> original, List<String> sorted) {
         return original.equals(sorted);
     }
 }

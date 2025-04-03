@@ -24,7 +24,7 @@ public class BasePage {
         try {
             this.driver = driver;
             PageFactory.initElements(driver, this);
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Не удалось инициализировать элементы страницы. Проверить, что WebDriver корректно инициализирован.", e);
         }
     }

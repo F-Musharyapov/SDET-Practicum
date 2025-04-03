@@ -6,6 +6,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static utils.GeneratorHelper.calculateAverageLength;
+import static utils.GeneratorHelper.findClosestNames;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +75,7 @@ public class DeleteCustomerPage extends BasePage {
         if (!closestNames.isEmpty()) {
             deleteCustomersByNames(closestNames);
         }
-        return closestNames; // Возвращаем список удаленных имен
+        return closestNames;
     }
 
     /**
@@ -89,47 +92,6 @@ public class DeleteCustomerPage extends BasePage {
             names.add(name);
         }
         return names;
-    }
-
-    /**
-     * Метод вычисления средней длины имен
-     *
-     * @param names список имен
-     * @return средняя длина имен
-     */
-    private double calculateAverageLength(List<String> names) {
-        if (names.isEmpty()) {
-            return 0;
-        }
-        double totalLength = 0;
-        for (String name : names) {
-            totalLength += name.length();
-        }
-        return totalLength / names.size();
-    }
-
-    /**
-     * Метод поиска имен, ближайших к средней длине
-     *
-     * @param names         список имен
-     * @param averageLength средняя длина имен
-     * @return список имен, ближайших к средней длине
-     */
-    private List<String> findClosestNames(List<String> names, double averageLength) {
-        List<String> closestNames = new ArrayList<>();
-        double closestDifference = Double.MAX_VALUE;
-
-        for (String name : names) {
-            double difference = Math.abs(name.length() - averageLength);
-            if (difference < closestDifference) {
-                closestDifference = difference;
-                closestNames.clear();
-                closestNames.add(name);
-            } else if (difference == closestDifference) {
-                closestNames.add(name);
-            }
-        }
-        return closestNames;
     }
 
     /**
