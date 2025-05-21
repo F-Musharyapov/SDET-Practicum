@@ -36,7 +36,10 @@ public class BaseTest {
 
         // Создаем объект ChromeOptions и добавляем параметр
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--ignore-certificate-errors"); // Игнорировать ошибки сертификатов
+        options.addArguments("--ignore-certificate-errors");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        // Игнорировать ошибки сертификатов
 
         // Передаем options в ChromeDriver
         driver = new ChromeDriver(options);
@@ -44,6 +47,7 @@ public class BaseTest {
 
         driver.get(config.url());
         driver.manage().window().maximize();
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
