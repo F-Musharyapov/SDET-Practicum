@@ -4,6 +4,7 @@ import config.BaseConfig;
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -32,7 +33,14 @@ public class BaseTest {
 
         System.setProperty(config.driverProperty(), config.driverPath());
 
-        driver = new ChromeDriver();
+
+        // Создаем объект ChromeOptions и добавляем параметр
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--ignore-certificate-errors"); // Игнорировать ошибки сертификатов
+
+        // Передаем options в ChromeDriver
+        driver = new ChromeDriver(options);
+        //driver = new ChromeDriver();
 
         driver.get(config.url());
         driver.manage().window().maximize();
