@@ -20,5 +20,6 @@ public class DeleteCustomerPageTest extends BaseTest {
         deleteCustomerPage.clickToTabCustomer();
         List<String> closestNames = deleteCustomerPage.deleteCustomerWithNameClosestToAverageLength();
         deleteCustomerPage.assertCustomersDeleted(closestNames);
+        System.out.print("Сработал DeleteCustomerPageTest");
     }
 }

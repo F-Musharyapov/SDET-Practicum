@@ -24,5 +24,6 @@ public class CustomerPageTest extends BaseTest {
         customerPage.clickToFirstNameHeader();
         boolean isSortedTrue = customerPage.checkSortingOrder(true);
         Assert.assertTrue(isSortedTrue, "Сортировка по именам возрастающая выполнена некорректно.");
+        System.out.print("Сработал CustomerPageTest");
     }
 }

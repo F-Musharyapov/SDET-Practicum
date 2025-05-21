@@ -42,5 +42,6 @@ public class AddCustomerPageTest extends BaseTest {
                 .clickToButtonAddCustomer()
                 .waitAlert()
                 .acceptAlert();
+        System.out.print("Сработал AddCustomerPage");
     }
 }
